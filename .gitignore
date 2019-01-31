@@ -3,3 +3,5 @@
 .venv/
 .vscode/
 **/.ipynb_checkpoints/
+**/*.joblib
+ex_boston_house_prices/*.txt
