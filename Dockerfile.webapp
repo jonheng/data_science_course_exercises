@@ -10,6 +10,6 @@ RUN pip install -r requirements.txt
 
 EXPOSE 8080
 
-ENTRYPOINT [ "flask" ]
+ENTRYPOINT [ "python" ]
 
 CMD [ "app/web_server.py" ]
