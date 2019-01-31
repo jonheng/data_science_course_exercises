@@ -6,24 +6,16 @@ if [ $? -ne 0 ]; then
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
-which python3
-if [ $? -ne 0 ]; then
-  echo "INFO: Installing python3"
-  brew install python3
-fi
+echo "INFO: Installing docker if not installed"
+command -v docker >/dev/null 2>&1 || brew cask install docker 
 
-virtual_environment_name=".$(basename $(pwd))"
-python3 -m venv $virtual_environment_name
+open --background -a Docker
+while ! docker system info > /dev/null 2>&1; do sleep 1 && echo "[INFO] Waiting for docker daemon startup to complete..."; done
 
-source $virtual_environment_name/bin/activate
-pip install --upgrade pip
-pip install -r requirements.txt
-
-python -m ipykernel install --user --name=${virtual_environment_name}
+docker pull jupyter/scipy-notebook
+docker run -v $(pwd):/home/jovyan/work -p 8888:8888 jupyter/scipy-notebook
 
 echo "================ 🚀 🚀 🚀 🚀 🚀 🚀 ================ "
 echo "Setup completed."
-echo "To get started, run the following commands:"
-echo "- source $virtual_environment_name/bin/activate"
-echo "- jupyter notebook"
+echo "To start jupyter notebook, run: docker run -v $(pwd):/home/jovyan/work -p 8888:8888 jupyter/scipy-notebook"
 echo "To stop jupyter notebook, hit Ctrl+C"
